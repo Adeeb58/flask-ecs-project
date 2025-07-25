@@ -1,0 +1,40 @@
+# A name for your workflow, which will appear in the "Actions" tab of your GitHub repo
+name: CI - Docker Build Check
+
+# -----------------
+# --- Triggers ----
+# -----------------
+# This section defines when the workflow will run.
+on:
+  # Run this workflow on every push to the 'main' branch
+  push:
+    branches: [ "main" ]
+  # Also run on every pull request that targets the 'main' branch
+  pull_request:
+    branches: [ "main" ]
+
+# -----------------
+# ------ Jobs -----
+# -----------------
+# A workflow is made up of one or more "jobs" that can run sequentially or in parallel.
+jobs:
+  # We define a single job named "build-docker-image"
+  build-docker-image:
+    # The type of virtual machine to run the job on. "ubuntu-latest" is a standard choice.
+    runs-on: ubuntu-latest
+
+    # -----------------
+    # ----- Steps -----
+    # -----------------
+    # A job contains a sequence of "steps" that are executed in order.
+    steps:
+      # Step 1: Check out the repository's code
+      # This downloads your code (app.py, Dockerfile, etc.) onto the virtual machine.
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Step 2: Build the Docker image
+      # This command attempts to build the image just like we did locally.
+      # If the build fails for any reason, the entire workflow will fail.
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag flask-app:ci-test

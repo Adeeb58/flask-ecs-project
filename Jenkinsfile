@@ -34,13 +34,17 @@ pipeline {
         }
 
         // Stage 3: Tag and Push the image to ECR
+                // This is the correct way
         stage('Push Image to ECR') {
             steps {
-                echo "Tagging image with: ${public.ecr.aws/g9j0e3q3/flask-app}:latest"
-                sh "docker tag flask-app:latest ${public.ecr.aws/g9j0e3q3/flask-app}:latest"
-
-                echo "Pushing image to ECR..."
-                sh "docker push ${Epublic.ecr.aws/g9j0e3q3/flask-app}:latest"
+                // Use the environment variable with env. prefix
+                echo "Tagging image with: ${env.ECR_REGISTRY_URI}:latest"
+                
+                // Use the environment variable with env. prefix
+                sh "docker tag flask-app:latest ${env.ECR_REGISTRY_URI}:latest"
+                
+                // Use the environment variable with env. prefix
+                sh "docker push ${env.ECR_REGISTRY_URI}:latest"
             }
         }
     }
